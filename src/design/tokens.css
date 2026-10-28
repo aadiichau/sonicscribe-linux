@@ -1,0 +1,57 @@
+/* SonicScribe design tokens, shared with Rabbit (see docs/DESIGN_SYSTEM.md). */
+:root {
+  color-scheme: dark;
+
+  --bg-0: #0d0e10;
+  --bg-1: #131417;
+  --bg-2: #191b1f;
+  --bg-3: #202328;
+  --bg-4: #2a2d33;
+
+  --line-1: #22252a;
+  --line-2: #2f333a;
+  --line-3: #454a53;
+
+  --fg-1: #ece9e3;
+  --fg-2: #a8a49c;
+  --fg-3: #7a776f;
+  --fg-4: #4d4b47;
+
+  --amber: #e5a23c;
+  --amber-hi: #f0b65c;
+  --amber-lo: #c4852a;
+  --amber-ink: #1b1206;
+  --amber-tint: rgb(229 162 60 / 0.1);
+  --amber-line: rgb(229 162 60 / 0.38);
+
+  --ok: #7fb894;
+  --err: #e0695c;
+  --warn: #d7b95b;
+  --info: #86a8c8;
+
+  --font-sans: "IBM Plex Sans", "Inter", "Noto Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "JetBrains Mono", "DejaVu Sans Mono", monospace;
+
+  --r-tag: 2px;
+  --r-ctl: 4px;
+  --r-panel: 6px;
+  --r-dialog: 8px;
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --m-quick: 90ms;
+  --m-base: 160ms;
+  --m-slow: 240ms;
+
+  --shadow-2: 0 8px 24px rgb(0 0 0 / 0.45);
+  --shadow-3: 0 24px 64px rgb(0 0 0 / 0.6);
+
+  --titlebar-h: 36px;
+  --sidebar-w: 196px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --m-base: 90ms;
+    --m-slow: 90ms;
+  }
+}

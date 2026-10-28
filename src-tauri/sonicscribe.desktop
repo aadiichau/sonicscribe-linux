@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=SonicScribe
+GenericName=Speech to Text
+Comment=Transcribe audio and video locally with Whisper
+Exec={{exec}} %F
+Icon={{icon}}
+Terminal=false
+Categories=AudioVideo;Audio;Utility;
+Keywords=transcribe;transcription;whisper;speech;subtitles;srt;dictation;
+StartupWMClass=sonicscribe
+StartupNotify=true
+MimeType=audio/mpeg;audio/x-wav;audio/wav;audio/mp4;audio/x-m4a;audio/flac;audio/x-flac;audio/ogg;audio/opus;audio/aac;audio/x-ms-wma;audio/aiff;audio/x-aiff;video/mp4;video/x-matroska;video/webm;video/quicktime;video/x-msvideo;video/mpeg;
