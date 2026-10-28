@@ -1,6 +1,6 @@
 [package]
 name = "sonicscribe"
-version = "2.0.0"
+version = "2.0.1"
 description = "SonicScribe — local speech-to-text for Linux"
 authors = ["Aditya Chauhan"]
 license = "MIT"
