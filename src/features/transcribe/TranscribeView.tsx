@@ -4,7 +4,7 @@ import { Icon } from "../../icons/Icon";
 import { Ruler } from "../../design/Ruler";
 import { Empty, Select, type Option } from "../../design/controls";
 import { LANGUAGES, MODELS, languageName } from "../../lib/catalog";
-import { bytes, clock, realtime, took } from "../../lib/format";
+import { bytes, clock, realtime, shortDevice, took } from "../../lib/format";
 import { isActive, isFinished, useApp } from "../../state/store";
 import { SetupBanner } from "../settings/EngineSetup";
 import { TranscriptActions, TranscriptLines } from "./Transcript";
@@ -198,7 +198,7 @@ function Reader() {
     j.duration ? clock(j.duration) : null,
     j.detectedLanguage ? languageName(j.detectedLanguage) : j.language !== "auto" ? languageName(j.language) : null,
     j.model,
-    j.computeType ? `${j.device} · ${j.computeType}` : j.device,
+    j.computeType ? `${shortDevice(j.device)} · ${j.computeType}` : shortDevice(j.device),
     j.segmentCount ? `${j.segmentCount} lines` : null,
   ].filter(Boolean);
 

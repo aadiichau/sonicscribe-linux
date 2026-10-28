@@ -52,3 +52,8 @@ export function highlight(text: string, terms: string[]): { text: string; hit: b
     .filter((p) => p !== "")
     .map((p) => ({ text: p, hit: ts.some((t) => new RegExp(`^${t}$`, "i").test(p)) }));
 }
+
+/** "NVIDIA GeForce RTX 3050 6GB Laptop GPU · CUDA" → "RTX 3050 6GB · CUDA". */
+export function shortDevice(d: string | null | undefined): string | null {
+  return d ? d.replace(/^NVIDIA (GeForce )?/, "").replace(/ (Laptop )?GPU\b/, "") : null;
+}

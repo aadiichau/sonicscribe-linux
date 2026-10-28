@@ -78,21 +78,24 @@ export function TranscriptActions({ id, disabled }: { id: string; disabled?: boo
       <MenuButton label="Export" icon={<Icon name="download" />} disabled={disabled}>
         {(close) => (
           <>
+            <div className="t-micro px-2 pt-1.5 pb-1">Save as</div>
             {FORMATS.map((f) => (
-              <button key={f.id} role="menuitem" className="menu-item" onClick={() => (close(), exportAs(f.id))}>
+              <button key={f.id} role="menuitem" className="menu-item whitespace-nowrap" onClick={() => (close(), exportAs(f.id))}>
                 <span className="flex-1">{f.label}</span>
-                <span className="t-data text-fg-3">{f.hint}</span>
+                <span className="t-data text-fg-3">{f.ext}</span>
               </button>
             ))}
-            <div className="my-1 h-px bg-line-1" />
-            <button role="menuitem" className="menu-item" onClick={() => (close(), exportAll())}>
-              <span className="flex-1">TXT + SRT + VTT to output folder</span>
+            <button role="menuitem" className="menu-item whitespace-nowrap" onClick={() => (close(), exportAll())}>
+              <span className="flex-1">TXT, SRT and VTT at once</span>
+              <span className="t-data text-fg-3">folder</span>
             </button>
-            <button role="menuitem" className="menu-item" onClick={() => (close(), copy("srt"))}>
-              <span className="flex-1">Copy as SRT</span>
+            <div className="mx-1 my-1 h-px bg-line-1" />
+            <div className="t-micro px-2 pt-1 pb-1">Copy</div>
+            <button role="menuitem" className="menu-item whitespace-nowrap" onClick={() => (close(), copy("timestamps"))}>
+              <span className="flex-1">With timestamps</span>
             </button>
-            <button role="menuitem" className="menu-item" onClick={() => (close(), copy("timestamps"))}>
-              <span className="flex-1">Copy with timestamps</span>
+            <button role="menuitem" className="menu-item whitespace-nowrap" onClick={() => (close(), copy("srt"))}>
+              <span className="flex-1">As SRT subtitles</span>
             </button>
           </>
         )}

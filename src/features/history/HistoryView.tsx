@@ -4,7 +4,7 @@ import type { Record as Transcript, Summary } from "../../ipc/types";
 import { Icon } from "../../icons/Icon";
 import { Empty } from "../../design/controls";
 import { languageName } from "../../lib/catalog";
-import { clock, highlight, plural, realtime, when } from "../../lib/format";
+import { clock, highlight, plural, realtime, shortDevice, when } from "../../lib/format";
 import { useApp } from "../../state/store";
 import { TranscriptActions, TranscriptLines } from "../transcribe/Transcript";
 
@@ -128,7 +128,7 @@ function Reader({ id, terms, onChanged }: { id: string; terms: string[]; onChang
       (e) => toast({ tone: "err", title: "Couldn't delete", body: errorText(e) }),
     );
 
-  const meta = [clock(rec.duration), languageName(rec.language), rec.model, rec.device, rec.elapsed ? `${realtime(rec.duration, rec.elapsed)} realtime` : null, when(rec.createdAt)].filter(Boolean);
+  const meta = [clock(rec.duration), languageName(rec.language), rec.model, shortDevice(rec.device), rec.elapsed ? `${realtime(rec.duration, rec.elapsed)} realtime` : null, when(rec.createdAt)].filter(Boolean);
 
   return (
     <section className="panel flex min-h-0 flex-col" aria-label="Transcript">

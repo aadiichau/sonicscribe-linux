@@ -37,10 +37,10 @@ export const LANGUAGES: [string, string][] = [
 
 export const languageName = (code: string | null | undefined) => (code ? (LANGUAGES.find(([c]) => c === code)?.[1] ?? code) : "—");
 
-export const FORMATS: { id: import("../ipc/types").ExportFormat; label: string; hint: string }[] = [
-  { id: "txt", label: "Text", hint: ".txt · paragraphs" },
-  { id: "timestamps", label: "Text with timestamps", hint: ".txt · [mm:ss] per line" },
-  { id: "srt", label: "SubRip subtitles", hint: ".srt" },
-  { id: "vtt", label: "WebVTT subtitles", hint: ".vtt" },
-  { id: "json", label: "JSON segments", hint: ".json" },
+export const FORMATS: { id: import("../ipc/types").ExportFormat; label: string; ext: string; chip: string }[] = [
+  { id: "txt", label: "Plain text", ext: ".txt", chip: "TXT" },
+  { id: "timestamps", label: "Timestamped text", ext: ".txt", chip: "TXT + times" },
+  { id: "srt", label: "Subtitles (SRT)", ext: ".srt", chip: "SRT" },
+  { id: "vtt", label: "Subtitles (VTT)", ext: ".vtt", chip: "VTT" },
+  { id: "json", label: "JSON segments", ext: ".json", chip: "JSON" },
 ];

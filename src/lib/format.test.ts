@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { bytes, clock, highlight, realtime, took, when } from "./format";
+import { bytes, clock, highlight, realtime, shortDevice, took, when } from "./format";
 
 describe("format", () => {
   it("bytes", () => {
@@ -26,6 +26,12 @@ describe("format", () => {
     const now = new Date(2026, 9, 29, 15, 0).getTime();
     expect(when(new Date(2026, 9, 29, 9, 5).getTime(), now)).toMatch(/^Today/);
     expect(when(new Date(2026, 9, 28, 9, 5).getTime(), now)).toMatch(/^Yesterday/);
+  });
+
+  it("shortDevice", () => {
+    expect(shortDevice("NVIDIA GeForce RTX 3050 6GB Laptop GPU · CUDA")).toBe("RTX 3050 6GB · CUDA");
+    expect(shortDevice("CPU · 16 threads")).toBe("CPU · 16 threads");
+    expect(shortDevice(null)).toBe(null);
   });
 
   it("highlight", () => {

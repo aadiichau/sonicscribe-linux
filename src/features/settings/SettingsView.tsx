@@ -88,8 +88,7 @@ export default function SettingsView() {
             return (
               <button key={f.id} aria-pressed={on} title={f.label} onClick={() => toggleExport(f.id)} className={`chip h-7 px-2.5 ${on ? "chip-amber" : "hover:text-fg-1"}`}>
                 {on && <Icon name="check" size={12} className="mr-1" />}
-                {f.hint.split(" ")[0]}
-                {f.id === "timestamps" && " ts"}
+                {f.chip}
               </button>
             );
           })}
