@@ -4,7 +4,7 @@ use std::sync::{Arc, Mutex};
 
 use serde::Deserialize;
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
-use tokio::process::{Child, ChildStdin, Command};
+use tokio::process::{Child, ChildStdin};
 use tokio::sync::mpsc;
 
 use super::env::Paths;
@@ -92,7 +92,7 @@ pub struct Worker {
 
 impl Worker {
     pub fn spawn(paths: &Paths) -> Result<Self> {
-        let mut child = Command::new(paths.python())
+        let mut child = super::env::host_command(paths.python())
             .arg(&paths.script)
             .envs(paths.engine_env())
             .stdin(Stdio::piped())

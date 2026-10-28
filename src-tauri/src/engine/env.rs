@@ -71,9 +71,7 @@ impl Paths {
     /// Environment for any process that runs the venv's Python.
     pub fn engine_env(&self) -> Vec<(String, String)> {
         let mut ld: Vec<String> = self.cuda_lib_dirs().iter().map(|p| p.to_string_lossy().into_owned()).collect();
-        if let Ok(existing) = std::env::var("LD_LIBRARY_PATH") {
-            ld.extend(existing.split(':').filter(|s| !s.is_empty()).map(String::from));
-        }
+        ld.extend(host_paths("LD_LIBRARY_PATH"));
         vec![
             ("LD_LIBRARY_PATH".into(), ld.join(":")),
             ("PYTHONUNBUFFERED".into(), "1".into()),
@@ -88,9 +86,34 @@ impl Paths {
     }
 }
 
+/// Entries of a path-list variable, minus those an AppImage launcher pointed into its own mount.
+fn host_paths(var: &str) -> Vec<String> {
+    let appdir = std::env::var("APPDIR").ok().filter(|d| !d.is_empty());
+    std::env::var(var)
+        .unwrap_or_default()
+        .split(':')
+        .filter(|e| !e.is_empty() && !appdir.as_deref().is_some_and(|a| e.starts_with(a)))
+        .map(String::from)
+        .collect()
+}
+
+/// A command for host programs (Python, pip). Inside an AppImage the launcher sets PYTHONHOME,
+/// PYTHONPATH and LD_LIBRARY_PATH for its own bundle, which makes the system Python crash on start.
+pub fn host_command(program: impl AsRef<std::ffi::OsStr>) -> Command {
+    let mut c = Command::new(program);
+    for var in ["PYTHONHOME", "PYTHONPATH", "PYTHONDONTWRITEBYTECODE", "PYTHONSTARTUP"] {
+        c.env_remove(var);
+    }
+    c.env("PATH", host_paths("PATH").join(":"));
+    match host_paths("LD_LIBRARY_PATH") {
+        ld if ld.is_empty() => c.env_remove("LD_LIBRARY_PATH"),
+        ld => c.env("LD_LIBRARY_PATH", ld.join(":")),
+    };
+    c
+}
+
 pub fn which(name: &str) -> Option<PathBuf> {
-    let path = std::env::var_os("PATH")?;
-    std::env::split_paths(&path).map(|d| d.join(name)).find(|p| p.is_file())
+    host_paths("PATH").into_iter().map(|d| Path::new(&d).join(name)).find(|p| p.is_file())
 }
 
 pub fn has_nvidia_driver() -> bool {
@@ -106,7 +129,7 @@ pub struct SystemPython {
 
 /// Version of an interpreter that can create venvs, or None.
 async fn python_version(exe: &Path) -> Option<(u32, u32, String)> {
-    let out = Command::new(exe)
+    let out = host_command(exe)
         .args(["-c", "import sys, venv, ensurepip; print('%d.%d.%d' % sys.version_info[:3])"])
         .stdin(Stdio::null())
         .output()
@@ -184,7 +207,7 @@ pub async fn status(paths: &Paths, custom_python: &str) -> EngineStatus {
     if !st.venv {
         return st;
     }
-    let out = Command::new(&py)
+    let out = host_command(&py)
         .arg(&paths.script)
         .arg("--probe")
         .envs(paths.engine_env())
@@ -285,13 +308,13 @@ pub async fn install(paths: &Paths, custom_python: &str, mut emit: impl FnMut(Se
         report(1, "Creating Python environment", Some(format!("Using Python {} at {}", sys_py.version, sys_py.path)));
         let _ = std::fs::remove_dir_all(&paths.venv);
         std::fs::create_dir_all(&paths.data)?;
-        let mut c = Command::new(&sys_py.path);
+        let mut c = host_command(&sys_py.path);
         c.args(["-m", "venv"]).arg(&paths.venv);
         run_streaming(c, |l| report(1, "Creating Python environment", Some(l))).await?;
     }
 
     let pip = |args: &[&str]| {
-        let mut c = Command::new(paths.python());
+        let mut c = host_command(paths.python());
         c.args(["-m", "pip", "install", "--progress-bar", "off", "--upgrade"]).args(args).envs(paths.engine_env());
         c
     };

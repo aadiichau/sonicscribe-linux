@@ -247,6 +247,10 @@ pub async fn engine_install(ctx: State<'_, Ctx>, on_progress: Channel<SetupEvent
     ctx.jobs.send(Msg::Restart);
     let result = async {
         if fresh {
+            // Never tear down a working environment without a Python to rebuild it from.
+            if env::find_python(&ctx.settings.get().python_path).await.is_none() {
+                return Err(Error::msg("No usable Python 3.9–3.14 was found, so the existing engine was left as it is. Install Python, or choose one under Settings → Engine."));
+            }
             env::remove_venv(&ctx.paths)?;
         }
         env::install(&ctx.paths, &ctx.settings.get().python_path, |e| {
